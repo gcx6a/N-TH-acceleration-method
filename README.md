@@ -1,4 +1,4 @@
-# An Online Adaptive Pc-DMD Algorithm with Grassmann Manifold Spatial Mapping
+# A computationally efficient physics-informed DMD-based acceleration method for Monte Carlo neutronics and thermal-hydraulics coupling simulations
 
 This repository contains the source code and the executable program for the paper.
 
