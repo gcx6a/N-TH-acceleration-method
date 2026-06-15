@@ -10,17 +10,24 @@ start_time = time.time()
 data = pd.read_excel('迭代结果.xlsx', sheet_name='Sheet1', header=None).values
 #print(data)
 a = 1  # 第一个快照阵的起始（注意：Python索引从0开始，但这里保持原意）
-b = 3 # 第一个快照阵的结束
-cmax = 100  # 总共需要计算的燃耗步数
+b = 3 # 第一个快照阵的结束（NOTE:change with the main program）
+cmax = 21  # 总共需要计算的燃耗步数（NOTE:change with the main program）
 
 x1 = data[:, a-1:b]  # Python索引从0开始，所以a-1到b-1
-x2 = data[:, a:b+1]  # a到b（原MATLAB中的a+1到b+1）
+x2 = data[:, a:b+1]  # a到b
 #print(x1)
 # 对第一个快照矩阵进行奇异值分解
 u, s, vh = np.linalg.svd(x1, full_matrices=False)
-#print(u)
+print(s)
 # 选取截断秩
-rank = round(0.7 * (b - a +1))
+total_energy = np.cumsum(s**2)
+energy_ratio = 0.9999
+rank = np.searchsorted(total_energy / total_energy[-1], energy_ratio) + 1
+'''
+#防止假截断
+if rank == b:
+		rank = rank -1
+'''
 uu = u[:, :rank]  # 左奇异值矩阵截断
 #print(uu)
 # 注意：numpy的svd返回的是vh（V的共轭转置），需要转置得到v
@@ -28,11 +35,9 @@ v = vh.T
 vv = v[:, :rank]  # 右奇异值矩阵截断
 
 U = uu.T  # 转置
-#print(U)
 # 构建奇异值矩阵（对角阵）
 ss = np.diag(s[:rank])
-#print(ss)
-#print(ss)
+print(ss)
 S = np.linalg.inv(ss)  # 求截断后奇异值矩阵逆
 
 # 求原矩阵低阶近似矩阵
@@ -66,14 +71,6 @@ for j in range(a-1, cmax):  # Python索引从0开始
     
     # 取实部
     z2[:, j] = np.real(yuce2[:, j])
-    '''
-    # 计算相对误差
-    for i in range(data.shape[0]):
-        if data[i, j] != 0:  # 避免除以零
-            wucha[i, j] = (z2[i, j] - data[i, j]) / data[i, j] * 100
-        else:
-            wucha[i, j] = 0
-    '''
 #print(z2[:,70])
 # 结束计时
 end_time = time.time()
@@ -81,4 +78,3 @@ print(f"计算完成，耗时: {end_time - start_time:.2f} 秒")
 
 # 如果需要保存结果，可以添加以下代码：
 pd.DataFrame(z2).to_excel('预测结果.xlsx')
-#pd.DataFrame(wucha).to_excel('误差分析.xlsx')
