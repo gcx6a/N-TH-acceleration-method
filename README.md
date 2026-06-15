@@ -5,6 +5,9 @@ This repository contains the source code and the executable program for the pape
 ## 1. Source Code Description
 The main files are described as follows:
 
+* **`IOCA.py`**
+    The IOCA method for selecting sample size.
+
 * **`pyDMD.py`**
     The DMD algorithm for predicting power field.
 
