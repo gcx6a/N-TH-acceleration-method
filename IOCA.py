@@ -9,8 +9,8 @@ data_list = pd.read_excel('迭代结果.xlsx', sheet_name='Sheet1', header=None)
 data = np.diff(data_list, axis=1)
 vectors = np.array(data)
 
-# 参数 m（通常设为总通道数或预期最大基底数）
-m = 3600   #NOTE:change with main program
+# 参数 M（物理-热工耦合区域数）
+M = 3600   #NOTE:change with main program
 
 # ===================== 算法主体 =====================
 basis = []          # 标准正交基向量列表
@@ -44,7 +44,7 @@ while i < len(vectors):
     if p == 0:
         accept = True
     else:
-        threshold = (p / m) * phi_max
+        threshold = (p / M) * phi_max
         #print(p / m)
         accept = (norm_res >= threshold)
 
