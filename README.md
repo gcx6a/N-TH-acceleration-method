@@ -5,6 +5,9 @@ This repository contains the source code and the executable program for the pape
 ## 1. Source Code Description
 The main files are described as follows:
 
+* **`SVD_low_rank_rebuild.py`**
+    The SVD method for denoising.
+
 * **`IOCA.py`**
     The IOCA method for selecting sample size.
 
